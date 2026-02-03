@@ -1,7 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import api from "../lib/axios";
 
 type NotesType = {
     _id: string;
@@ -22,7 +23,7 @@ export const useNotes = () => (
     useQuery<NotesType[], AxiosError>({
         queryKey: ['notes'],
     queryFn: async () => {
-        const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/notes`)
+        const res = await api.get(`/api/notes`)
         return res.data;
     },
     retry: (failureCount, error) => {
@@ -38,7 +39,7 @@ export const useNote = (id: string) => (
     useQuery<NoteType, AxiosError>({
         queryKey: ['note', id],
     queryFn: async () => {
-        const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/notes/${id}`)
+        const res = await api.get(`/api/notes/${id}`)
         return res.data;
     },
     retry: (failureCount, error) => {
@@ -55,7 +56,7 @@ export const useCreateNote = () => {
 
     return useMutation<NoteType, AxiosError, NoteType>({
         mutationFn: async (note) => {
-            const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/notes/`, note)
+            const res = await api.post(`/api/notes/`, note)
             return res.data
         },
         onMutate: () => {
@@ -78,7 +79,7 @@ export const useEditeNote = (id: string) => {
 
     return useMutation<NoteType, AxiosError, NoteType>({
         mutationFn: async (note) => {
-            const res = await axios.put(`${import.meta.env.VITE_API_URL}/api/notes/${id}`, note)
+            const res = await api.put(`/api/notes/${id}`, note)
             return res.data
         },
         onMutate: () => {
@@ -102,7 +103,7 @@ export const useDeleteNote = (id: string) => {
 
     return useMutation<void, AxiosError>({
         mutationFn: async () => {
-            await axios.delete(`${import.meta.env.VITE_API_URL}/api/notes/${id}`)
+            await api.delete(`/api/notes/${id}`)
         },
         onMutate: () => {
             toast.loading('Deleteing...', { id: 'saveToast' });
