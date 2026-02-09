@@ -4,6 +4,7 @@ const BASE_URL = import.meta.env.MODE === "production"? "" : import.meta.env.VIT
 
 const api = axios.create({
     baseURL: BASE_URL,
+    withCredentials: true,
 })
 
 export default api

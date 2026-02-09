@@ -30,15 +30,15 @@ const CreateNote = () => {
     }
 
     return (
-        <div className="bg-base-100 min-h-screen">
+        <div className="bg-base-200 min-h-screen bg-opacity-50 backdrop-filter backdrop-blur-xl backdrop-blu">
             <div className="mx-auto sm:w-[75%]">
                 <div className="py-4">
-                    <button className="btn btn-ghost" onClick={() => navigate('/')}>
+                    <button className="btn btn-ghost" onClick={() => navigate('/home')}>
                         <ArrowLeft />
                         Back to Notes
                     </button>
                 </div>
-                <div className="card bg-base-200">
+                <div className="card bg-base-100">
                     <div className="card-body space-y-4">
                         <h2 className="card-title text-white">Create New Note</h2>
                         <label className="form-control w-full">

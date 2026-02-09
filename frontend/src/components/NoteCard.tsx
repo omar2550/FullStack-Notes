@@ -19,7 +19,7 @@ const NoteCard = ({ id, title, content, createdAt, lastUpdate, getId, onChange }
 
     return (
 
-        <div className="card bg-base-100 duration-300 transition-all hover:scale-105 hover:translate-y-1 border-t-4 border-primary">
+        <div className="card bg-base-100 bg-opacity-90 duration-300 transition-all hover:scale-105 hover:translate-y-1 border-t-4 border-primary">
             <div className="card-body">
                 <h2 className="card-title text-primary">{title}</h2>
                 <p className="line-clamp-2">{content}</p>
@@ -29,9 +29,9 @@ const NoteCard = ({ id, title, content, createdAt, lastUpdate, getId, onChange }
                         <p>Last Update: {new Date(lastUpdate).toLocaleDateString('en', { month: 'long', day: '2-digit', year: 'numeric' })}</p>
                     </div>
                     <div className="space-x-1 flex items-center justify-end">
-                        <button className="btn btn-sm"><Edit2 size={14} onClick={() => {
-                            navigate(id)
-                        }} /></button>
+                        <button className="btn btn-sm" onClick={() => {
+                            navigate(`/${id}`)
+                        }} ><Edit2 size={14} /></button>
                         <button className="btn btn-sm text-error" onClick={() => {
                             getId(id)
                             onChange(true)

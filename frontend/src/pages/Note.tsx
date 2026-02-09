@@ -51,11 +51,11 @@ const Note = () => {
     };
 
     return (
-        <div className="bg-base-100 min-h-screen">
+        <div className="bg-base-200 min-h-screen bg-opacity-50 backdrop-filter backdrop-blur-xl backdrop-blu">
             <Dialog open={open} onChange={setOpen} onConfirm={deleteNote} />
             <div className="mx-auto sm:w-[75%]">
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-y-3 sm:justify-between py-4">
-                    <button className={`btn btn-ghost`} onClick={() => navigate('/')}>
+                    <button className={`btn btn-ghost`} onClick={() => navigate('/home')}>
                         <ArrowLeft />
                         Back to Notes
                     </button>
@@ -64,7 +64,7 @@ const Note = () => {
                         Delete Note
                     </button>
                 </div>
-                <div className="card bg-base-200">
+                <div className="card bg-base-100">
                     <div className="card-body space-y-4">
                         <label className="form-control w-full">
                             <div className="label">
