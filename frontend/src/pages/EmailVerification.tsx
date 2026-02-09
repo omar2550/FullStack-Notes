@@ -1,14 +1,14 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type SyntheticEvent } from "react";
 import { motion } from "framer-motion";
 import { useAuth } from "../context/Auth/AuthContext";
 
 const EmailVerification = () => {
 	const [code, setCode] = useState(["", "", "", "", "", ""]);
-	const inputRefs = useRef([]);
+	const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
 	const { verifyEmailIsLoading, verifyEmail } = useAuth();
 
-	const handleChange = (index, value) => {
+	const handleChange = (index: number, value: string) => {
 		const newCode = [...code];
 
 		// Handle pasted content
@@ -20,28 +20,31 @@ const EmailVerification = () => {
 			setCode(newCode);
 
 			// Focus on the last non-empty input or the first empty one
-			const lastFilledIndex = newCode.findLastIndex((digit) => digit !== "");
+			let lastFilledIndex = -1;
+			for (let i = 0; i < newCode.length; i++) {
+				if (newCode[i] !== "") lastFilledIndex = i;
+			}
 			const focusIndex = lastFilledIndex < 5 ? lastFilledIndex + 1 : 5;
-			inputRefs.current[focusIndex].focus();
+			inputRefs?.current[focusIndex]?.focus();
 		} else {
 			newCode[index] = value;
 			setCode(newCode);
 
 			// Move focus to the next input field if value is entered
 			if (value && index < 5) {
-				inputRefs.current[index + 1].focus();
+				inputRefs?.current[index + 1]?.focus();
 			}
 		}
 	};
 
-	const handleKeyDown = (index, e) => {
+	const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
 		if (e.key === "Backspace" && !code[index] && index > 0) {
-			inputRefs.current[index - 1].focus();
+			inputRefs?.current[index - 1]?.focus();
 		}
 	};
 
-	const handleSubmit = (e) => {
-		e.preventDefault();
+	const handleSubmit = (e?: SyntheticEvent<HTMLFormElement>) => {
+		e?.preventDefault();
 		const verificationCode = code.join("");
 		verifyEmail(verificationCode);
 	};
@@ -49,7 +52,7 @@ const EmailVerification = () => {
 	// Auto submit when all fields are filled
 	useEffect(() => {
 		if (code.every((digit) => digit !== "")) {
-			handleSubmit(new Event("submit"));
+			handleSubmit();
 		}
 	}, [code]);
 
@@ -71,9 +74,9 @@ const EmailVerification = () => {
 						{code.map((digit, index) => (
 							<input
 								key={index}
-								ref={(el) => (inputRefs.current[index] = el)}
+								ref={(el) => { (inputRefs.current[index] = el) }}
 								type='text'
-								maxLength='6'
+								maxLength={6}
 								value={digit}
 								onChange={(e) => handleChange(index, e.target.value)}
 								onKeyDown={(e) => handleKeyDown(index, e)}
