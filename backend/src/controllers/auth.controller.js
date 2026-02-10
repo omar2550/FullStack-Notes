@@ -168,10 +168,10 @@ export const forgotPassword = async (req, res) => {
 
         await user.save()
 
-        await sendForgotPassword(email, `http://localhost:5173/reset-password?token=${user.resetPasswordToken}`)
+        await sendForgotPassword(email, `${process.env.FRONTEND_URL}/reset-password?token=${user.resetPasswordToken}`)
 
         res.status(200).json({
-            success: true, message: 'User Forgot Password Email was sint', url: `http://localhost:5173/reset-password?token=${user.resetPasswordToken}`
+            success: true, message: 'User Forgot Password Email was sint', url: `${process.env.FRONTEND_URL}/reset-password?token=${user.resetPasswordToken}`
         })
 
     } catch (error) {

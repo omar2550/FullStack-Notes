@@ -80,8 +80,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         },
         onMutate: () => toast.loading('Sending Verification code...', { id: 'verify-email' }),
         onSuccess: (data) => {
-            console.log(data)
-
             queryClient.setQueryData(['authUser'], data.user);
             toast.success('Email verified!', { id: 'verify-email' });
             navigate('/home', { replace: true });
@@ -140,9 +138,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             return res.data;
         },
         onMutate: () => toast.loading('Sending Link...', { id: 'forgot-password' }),
-        onSuccess: (data) => {
+        onSuccess: () => {
             toast.success('Link sent Successfully', { id: 'forgot-password' });
-            console.log(data.url)
         },
         onError: (error: any) => {
             if (axios.isAxiosError(error)) {
