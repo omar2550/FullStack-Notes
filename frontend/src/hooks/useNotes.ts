@@ -65,7 +65,7 @@ export const useCreateNote = () => {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['notes']});
             toast.success('Note created successfully', { id: 'saveToast' });
-            navigate('/')
+            navigate('/home')
         },
         onError: (error) => {
             if (error.response?.status !== 429) 
@@ -106,12 +106,12 @@ export const useDeleteNote = (id: string) => {
             await api.delete(`/api/notes/${id}`)
         },
         onMutate: () => {
-            toast.loading('Deleteing...', { id: 'saveToast' });
+            toast.loading('Deleting...', { id: 'saveToast' });
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['notes']});
             toast.success('Note Deleted successfully', { id: 'saveToast' });
-            navigate('/')
+            navigate('/home')
         },
         onError: (error) => {
             if (error.response?.status !== 429) 

@@ -1,9 +1,9 @@
 import Note from "../models/Note.js"
 import mongoose from 'mongoose';
 
-export const getNotes = async (_, res) => {
+export const getNotes = async (req, res) => {
     try {
-        const notes = await Note.find()
+        const notes = await Note.find({ user: req.userId })
         res.status(200).json(notes);
     } catch (error) {
         console.log('Error in getNotes controller', error);
@@ -16,7 +16,7 @@ export const getNote = async (req, res) => {
         if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
             return res.status(404).json({ message: 'Invalid note ID' });
         }
-        const note = await Note.findById(req.params.id)
+        const note = await Note.findOne({ _id: req.params.id, user: req.userId })
         if (!note) return res.status(404).json({ message: 'The note does not exist' })
         res.status(200).json(note);
     } catch (error) {
@@ -28,7 +28,7 @@ export const getNote = async (req, res) => {
 export const createNote = async (req, res) => {
     try {
         const { title, content } = req.body
-        const note = new Note({ title, content })
+        const note = new Note({ title, content, user: req.userId })
         await note.save();
         res.status(201).json(note);
     } catch (error) {
@@ -43,7 +43,13 @@ export const updateNote = async (req, res) => {
             return res.status(404).json({ message: 'Invalid note ID' });
         }
         const { title, content } = req.body
-        const updatedNote = await Note.findByIdAndUpdate(req.params.id, { title, content }, { new: true })
+        const updatedNote = await Note.findOneAndUpdate({
+            _id: req.params.id,
+            user: req.userId
+        },
+            { title, content },
+            { new: true })
+
         if (!updatedNote) return res.status(404).json({ message: 'The note does not exist' })
         res.status(200).json(updatedNote);
     } catch (error) {
@@ -57,7 +63,8 @@ export const deleteNote = async (req, res) => {
         if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
             return res.status(404).json({ message: 'Invalid note ID' });
         }
-        const deletedNote = await Note.findByIdAndDelete(req.params.id)
+        const deletedNote = await Note.findOneAndDelete({ _id: req.params.id, user: req.userId })
+
         if (!deletedNote) return res.status(404).json({ message: 'The note does not exist' })
         res.status(200).json(deletedNote);
     } catch (error) {
